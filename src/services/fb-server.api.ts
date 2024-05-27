@@ -16,6 +16,7 @@ import logger from './logger';
 
 const TYPE_TO_ENDPOINT = {
   EXTERNAL_KEY_PROOF_OF_OWNERSHIP_RESPONSE: 'keylink_proof_of_ownership_response',
+  EXTERNAL_KEY_TX_SIGN_RESPONSE: 'keylink_tx_sign_response',
 };
 
 let i = 21; //TODO: remove
