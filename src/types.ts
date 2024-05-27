@@ -43,12 +43,10 @@ export interface FBMessage {
   payload: FBMessagePayload;
 }
 
-export interface MPCPayload {
+export interface TXSignPayload {
   phase: TxType;
-  tenantId: GUID;
   txId: GUID;
   keyId: GUID;
-  payload: string;
   algorithm: number;
   metadata: TransactionMetadata;
   userAccessToken: string;
@@ -64,7 +62,6 @@ export interface PairingToken {
 
 export interface TransactionMetadata {
   signInfo: Array<{ path: number[]; payload: string }>;
-  chaincode: string;
   txMetaData: string;
   txMetaDataSignatures: {
     id: string;
