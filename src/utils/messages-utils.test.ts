@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { messageBuilder } from '../services/fb-server.api.test';
+import { proofOfOwnershipMessageBuilder } from '../services/fb-server.api.test';
 import { FBMessage, FBMessageEnvlope, FBMessagePayload, Message, MessageEnvelop } from '../types';
 import * as utils from './messages-utils';
 
@@ -78,7 +78,7 @@ function aFbProofOfOwnershipMessage(privateKey: string): FBMessage {
 }
 
 function aFbMessagePayload(privateKey: string): FBMessagePayload {
-  const payload: Message = messageBuilder.aMessage();
+  const payload: Message = proofOfOwnershipMessageBuilder.aMessage();
   const payloadStr = JSON.stringify(payload);
 
   const signer = crypto.createSign('sha256');

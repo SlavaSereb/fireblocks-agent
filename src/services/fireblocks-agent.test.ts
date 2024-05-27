@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { GUID, JWT } from '../types';
 import deviceService from './device.service';
 import fbServerApi from './fb-server.api';
-import { fbServerApiDriver, messageBuilder } from './fb-server.api.test';
+import { fbServerApiDriver, proofOfOwnershipMessageBuilder } from './fb-server.api.test';
 import agent from './fireblocks-agent';
 import messagesService from './messages.service';
 const c = new Chance();
@@ -23,7 +23,7 @@ describe('HSM Agent', () => {
 
   it('should fetch and handle messages', async () => {
     jest.useFakeTimers();
-    const someMessages = [messageBuilder.fbMsgEnvelope()];
+    const someMessages = [proofOfOwnershipMessageBuilder.fbMsgEnvelope()];
     jest.spyOn(fbServerApi, 'getMessages').mockImplementation(jest.fn(() => Promise.resolve(someMessages)));
     jest.spyOn(messagesService, 'handleMessages').mockImplementation(jest.fn(() => Promise.resolve()));
 

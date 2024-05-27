@@ -5,13 +5,13 @@ import Chance from 'chance';
 import { CUSTOMER_SERVER_AUTHORIZATION, CUSTOMER_SERVER_URL } from '../constants';
 import { Message, MessageEnvelop, MessageStatus } from '../types';
 import service, { MessagesResponse, MessagesStatusRequest, MessagesStatusResponse } from './customer-server.api';
-import { messageBuilder } from './fb-server.api.test';
+import { proofOfOwnershipMessageBuilder } from './fb-server.api.test';
 const c = new Chance();
 
 describe('Customer Server API', () => {
   it('should send tx to sign', async () => {
     const msgId = c.natural();
-    const aMessage = messageBuilder.aMessage();
+    const aMessage = proofOfOwnershipMessageBuilder.aMessage();
     const messagesToSign = customerServerApiDriver.given.aMessageRequest(msgId, aMessage);
     const expectedRes: MessageStatus[] = [
       {

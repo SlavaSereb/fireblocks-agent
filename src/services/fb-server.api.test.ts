@@ -52,7 +52,7 @@ describe('Server API', () => {
     const accessToken = fbServerApiDriver.given.accessToken();
     const deviceData = deviceDriver.given.deviceData();
     jest.spyOn(deviceService, 'getDeviceData').mockReturnValue(deviceData);
-    const someMessages = [messageBuilder.fbMsgEnvelope()];
+    const someMessages = [proofOfOwnershipMessageBuilder.fbMsgEnvelope()];
     fbServerApiDriver.mock.accessToken(deviceData, accessToken);
     fbServerApiDriver.mock.messages(accessToken, someMessages);
 
@@ -65,7 +65,7 @@ describe('Server API', () => {
     const accessToken = fbServerApiDriver.given.accessToken();
     const deviceData = deviceDriver.given.deviceData();
     jest.spyOn(deviceService, 'getDeviceData').mockReturnValue(deviceData);
-    const someMessage = messageBuilder.fbMsgEnvelope();
+    const someMessage = proofOfOwnershipMessageBuilder.fbMsgEnvelope();
     fbServerApiDriver.mock.accessToken(deviceData, accessToken);
     fbServerApiDriver.mock.messages(accessToken, someMessage);
 
@@ -109,7 +109,7 @@ describe('Server API', () => {
 
   it('should ack message', async () => {
     const accessToken = fbServerApiDriver.given.accessToken();
-    const aMessage = messageBuilder.fbMsgEnvelope({ msgId: c.natural() });
+    const aMessage = proofOfOwnershipMessageBuilder.fbMsgEnvelope({ msgId: c.natural() });
     const deviceData = deviceDriver.given.deviceData();
     jest.spyOn(deviceService, 'getDeviceData').mockReturnValue(deviceData);
     fbServerApiDriver.mock.accessToken(deviceData, accessToken);
@@ -177,7 +177,7 @@ export function aProofOfOwnershipSignedMessageStatus(): MessageStatus {
     msgId: c.natural(),
     requestId: c.guid(),
     status: 'SIGNED',
-    payload: JSON.stringify(messageBuilder.aMessage()),
+    payload: JSON.stringify(proofOfOwnershipMessageBuilder.aMessage()),
     signedPayload: 'signed payload',
     type: 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST',
   };
@@ -187,12 +187,12 @@ export function aProofOfOwnershipFailedMessageStatus(): MessageStatus {
     msgId: c.natural(),
     requestId: c.guid(),
     status: 'FAILED',
-    payload: JSON.stringify(messageBuilder.aMessage()),
+    payload: JSON.stringify(proofOfOwnershipMessageBuilder.aMessage()),
     errorMessage: 'tx not authorized',
     type: 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST',
   };
 }
-export const messageBuilder = {
+export const proofOfOwnershipMessageBuilder = {
   fbMsgEnvelope: (
     fbMsgEnvelope?: Partial<FBMessageEnvlope>,
     fbMsg?: FBMessage,
@@ -200,7 +200,7 @@ export const messageBuilder = {
   ): FBMessageEnvlope => {
     const msg = shouldEncode
       ? jwt.sign(JSON.stringify(fbMsg || c.string()), 'shhhhh')
-      : fbMsg || messageBuilder.fbMessage('EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST', messageBuilder.aMessage());
+      : fbMsg || proofOfOwnershipMessageBuilder.fbMessage('EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST', proofOfOwnershipMessageBuilder.aMessage());
     return {
       msg,
       msgId: c.natural(),
