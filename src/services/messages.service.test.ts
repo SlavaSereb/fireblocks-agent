@@ -16,11 +16,11 @@ describe('messages service', () => {
     jest.clearAllMocks();
   });
 
-  const types: TxType[] = ['EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST', 'EXTERNAL_KEY_SIGNING_REQUEST'];
+  const types: TxType[] = ['EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST', 'EXTERNAL_KEY_TX_SIGN_REQUEST'];
   it.each(types)('should send the customer server the messages to sign', async (type: TxType) => {
     const msgId = c.natural();
     const aTxToSignMessage = proofOfOwnershipMessageBuilder.aMessage();
-    const fbMessage = proofOfOwnershipMessageBuilder.fbMessage('EXTERNAL_KEY_SIGNING_REQUEST', aTxToSignMessage);
+    const fbMessage = proofOfOwnershipMessageBuilder.fbMessage('EXTERNAL_KEY_TX_SIGN_REQUEST', aTxToSignMessage);
     const fbMessageEnvlope = proofOfOwnershipMessageBuilder.fbMsgEnvelope({ msgId }, fbMessage);
     const msgEnvelop = proofOfOwnershipMessageBuilder.anMessageEnvelope(msgId, type, aTxToSignMessage);
     jest.spyOn(customerServerApi, 'messagesToSign').mockResolvedValue([]);
@@ -60,9 +60,9 @@ describe('messages service', () => {
   it('should get pending messages from cache', async () => {
     const msgId = c.natural();
     const aTxToSignMessage = proofOfOwnershipMessageBuilder.aMessage();
-    const fbMessage = proofOfOwnershipMessageBuilder.fbMessage('EXTERNAL_KEY_SIGNING_REQUEST', aTxToSignMessage);
+    const fbMessage = proofOfOwnershipMessageBuilder.fbMessage('EXTERNAL_KEY_TX_SIGN_REQUEST', aTxToSignMessage);
     const fbMessageEnvlope = proofOfOwnershipMessageBuilder.fbMsgEnvelope({ msgId }, fbMessage);
-    const msgEnvelop = proofOfOwnershipMessageBuilder.anMessageEnvelope(msgId, 'EXTERNAL_KEY_SIGNING_REQUEST', aTxToSignMessage);
+    const msgEnvelop = proofOfOwnershipMessageBuilder.anMessageEnvelope(msgId, 'EXTERNAL_KEY_TX_SIGN_REQUEST', aTxToSignMessage);
 
     jest.spyOn(messagesUtils, 'decodeAndVerifyMessage').mockReturnValue(msgEnvelop);
     jest.spyOn(customerServerApi, 'messagesToSign').mockResolvedValue([
@@ -114,9 +114,9 @@ describe('messages service', () => {
   it('shuold remove acked messages from the cache', async () => {
     const msgId = c.natural();
     const aTxToSignMessage = proofOfOwnershipMessageBuilder.aMessage();
-    const fbMessage = proofOfOwnershipMessageBuilder.fbMessage('EXTERNAL_KEY_SIGNING_REQUEST', aTxToSignMessage);
+    const fbMessage = proofOfOwnershipMessageBuilder.fbMessage('EXTERNAL_KEY_TX_SIGN_REQUEST', aTxToSignMessage);
     const fbMessageEnvlope = proofOfOwnershipMessageBuilder.fbMsgEnvelope({ msgId }, fbMessage);
-    const msgEnvelop = proofOfOwnershipMessageBuilder.anMessageEnvelope(msgId, 'EXTERNAL_KEY_SIGNING_REQUEST', aTxToSignMessage);
+    const msgEnvelop = proofOfOwnershipMessageBuilder.anMessageEnvelope(msgId, 'EXTERNAL_KEY_TX_SIGN_REQUEST', aTxToSignMessage);
 
     jest.spyOn(messagesUtils, 'decodeAndVerifyMessage').mockReturnValue(msgEnvelop);
 

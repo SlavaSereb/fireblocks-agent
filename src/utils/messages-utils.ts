@@ -27,7 +27,8 @@ const toMessage = (msgId: number, fbMessage: FBMessage): MessageEnvelop => {
     type: fbMessage.type,
   };
   switch (fbMessage.type) {
-    case 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST': {
+    case 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST':
+    case 'EXTERNAL_KEY_TX_SIGN_REQUEST':
       const fbMsgPayload = fbMessage.payload;
       const parsedMessage = JSON.parse(fbMsgPayload.payload) as Message;
       return {
@@ -35,7 +36,6 @@ const toMessage = (msgId: number, fbMessage: FBMessage): MessageEnvelop => {
         message: parsedMessage,
         payload: fbMsgPayload.payload,
       };
-    }
   }
 };
 
@@ -70,7 +70,8 @@ const getDataToVerify = (fbMessage: FBMessage): VerifyDetails[] => {
   const res: VerifyDetails[] = [];
 
   switch (fbMessage.type) {
-    case 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST': {
+    case 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST':
+    case 'EXTERNAL_KEY_TX_SIGN_REQUEST':
       const fbMsgPayload = fbMessage.payload;
       const messageVerifier = KEY_TO_VERIFIER_MAP[fbMsgPayload.signatureData.service.toLowerCase()];
       const certificate = certMap[messageVerifier];
@@ -83,7 +84,6 @@ const getDataToVerify = (fbMessage: FBMessage): VerifyDetails[] => {
         },
       });
       break;
-    }
   }
   return res;
 };
@@ -100,7 +100,7 @@ interface VerifyDetails {
 export type SignatureFormat = 'base64' | 'hex';
 
 const KEY_TO_VERIFIER_MAP: Record<string, string> = {
-  MPC_START_SIGNING: 'vs',
+  signing_service: 'vs',
   policy_service: 'ps',
   configuration_manager: 'cm',
 };
