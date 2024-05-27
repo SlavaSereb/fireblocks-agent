@@ -73,7 +73,8 @@ export interface components {
       type: components["schemas"]["TxType"];
       /** @example 425878000014 */
       msgId: number;
-      requestId: string;
+      requestId?: string;
+      txId?: string;
       /**
        * @example SIGNED
        * @enum {string}
@@ -104,9 +105,9 @@ export interface components {
        */
       tenantId: string;
       /** @example 1704122262 */
-      timestamp: number;
+      timestamp?: number;
       /** @example 1 */
-      version: number;
+      version?: number;
       /**
        * Format: uuid
        * @example 70721651-a7f3-42f6-a984-6e058269495f
@@ -116,7 +117,12 @@ export interface components {
        * Format: uuid
        * @example b015f35e-5d44-4d68-a0df-a1c625255abc
        */
-      requestId: string;
+      requestId?: string;
+      /**
+       * Format: uuid
+       * @example b015f35e-5d44-4d68-a0df-a1c625255abc
+       */
+      txId?: string;
       /** @example 70721651-a7f3-42f6-a984-6e058269495f */
       signingDeviceKeyId: string;
       algorithm: components["schemas"]["Algorithm"];
