@@ -30,7 +30,7 @@ Fireblocks Agent is an open-source on-prem service written in Typescript which i
   - `cd examples/server`
   - `npm run build:docker`
   - `npm run start:docker`
-- Copy `.env.prod` and name it `.env.{env}` for example `.env.dev9`
+- Copy `.env.prod` and name it `.env.{env}` for example `.env.prod`
 - Edit your newly created `.env.{env}` file with the right config
 - Start fireblocks agent with your desired env i.e `npm run start --env=prod`
 
