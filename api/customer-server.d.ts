@@ -131,6 +131,19 @@ export interface components {
        * @example 3de97a18822d06fd19bea82522917c634c134a13ace2b887cf12e37dfd343d30
        */
       data: string;
+      metadata?: components["schemas"]["TxMetadata"];
+    };
+    TxMetadata: {
+      txMetadata: string;
+      txMetaDataSignatures?: components["schemas"]["TxMetadataSignature"][];
+    };
+    TxMetadataSignature: {
+      /** @example policy_service */
+      id: string;
+      /** @example SERVICE */
+      type: string;
+      /** @example 3de97a18822d06fd19bea82522917c634c134a13ace2b887cf12e37dfd343d30 */
+      signature: string;
     };
     Error: {
       message: string;

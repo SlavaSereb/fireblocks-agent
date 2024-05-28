@@ -172,6 +172,34 @@ components:
           description: The string to sign
           type: string
           example: 3de97a18822d06fd19bea82522917c634c134a13ace2b887cf12e37dfd343d30
+        metadata:
+          $ref: "#/components/schemas/TxMetadata"
+    TxMetadata:
+      required:
+        - txMetadata
+        - txMetadataSignatures
+      properties:
+        txMetadata:
+          type: string
+        txMetaDataSignatures:
+          type: array
+          items:
+            $ref: "#/components/schemas/TxMetadataSignature"
+    TxMetadataSignature:
+      required:
+        - id
+        - type
+        - signature
+      properties:
+        id:
+          type: string
+          example: policy_service
+        type:
+          type: string
+          example: SERVICE
+        signature:
+          type: string
+          example: 3de97a18822d06fd19bea82522917c634c134a13ace2b887cf12e37dfd343d30
     Error:
       type: object
       required:

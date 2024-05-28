@@ -74,3 +74,5 @@ export type CertificatesMap = { [service: string]: string };
 
 export type MessageStatus = components['schemas']['MessageStatus'];
 export type MessageEnvelop = components['schemas']['MessageEnvelope'];
+export type TxMetadata = components['schemas']['TxMetadata'];
+export type TxMetadataSignature = components['schemas']['TxMetadataSignature'];

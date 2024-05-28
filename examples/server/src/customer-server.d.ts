@@ -14,6 +14,7 @@ export interface paths {
         };
       };
       responses: {
+        /** @description Messages Status */
         200: {
           content: {
             "application/json": components["schemas"]["MessagesStatusResponse"];
@@ -72,13 +73,16 @@ export interface components {
       type: components["schemas"]["TxType"];
       /** @example 425878000014 */
       msgId: number;
-      requestId: string;
+      requestId?: string;
+      txId?: string;
       /**
        * @example SIGNED
        * @enum {string}
        */
       status: "PENDING_SIGN" | "SIGNED" | "FAILED";
+      /** @example Transction 8c2b2b3d-fb83-497e-8138-72446b9184b6 failed due to insufficient funds */
       errorMessage?: string;
+      /** @example singed-tx-string */
       signedPayload?: string;
       /** @description Original message payload */
       payload: string;
@@ -87,7 +91,7 @@ export interface components {
      * @example EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST
      * @enum {string}
      */
-    TxType: "EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST" | "EXTERNAL_KEY_SIGNING_REQUEST";
+    TxType: "EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST" | "EXTERNAL_KEY_TX_SIGN_REQUEST";
     /**
      * @description algorithm to sign with
      * @example ECDSA_SECP256K1
@@ -101,16 +105,24 @@ export interface components {
        */
       tenantId: string;
       /** @example 1704122262 */
-      timestamp: number;
+      timestamp?: number;
       /** @example 1 */
-      version: number;
-      /** Format: uuid */
+      version?: number;
+      /**
+       * Format: uuid
+       * @example 70721651-a7f3-42f6-a984-6e058269495f
+       */
       fbKeyId: string;
       /**
        * Format: uuid
        * @example b015f35e-5d44-4d68-a0df-a1c625255abc
        */
-      requestId: string;
+      requestId?: string;
+      /**
+       * Format: uuid
+       * @example b015f35e-5d44-4d68-a0df-a1c625255abc
+       */
+      txId?: string;
       /** @example 70721651-a7f3-42f6-a984-6e058269495f */
       signingDeviceKeyId: string;
       algorithm: components["schemas"]["Algorithm"];
@@ -119,6 +131,19 @@ export interface components {
        * @example 3de97a18822d06fd19bea82522917c634c134a13ace2b887cf12e37dfd343d30
        */
       data: string;
+      metadata?: components["schemas"]["TxMetadata"];
+    };
+    TxMetadata: {
+      txMetadata: string;
+      txMetaDataSignatures?: components["schemas"]["TxMetadataSignature"][];
+    };
+    TxMetadataSignature: {
+      /** @example policy_service */
+      id: string;
+      /** @example SERVICE */
+      type: string;
+      /** @example 3de97a18822d06fd19bea82522917c634c134a13ace2b887cf12e37dfd343d30 */
+      signature: string;
     };
     Error: {
       message: string;
