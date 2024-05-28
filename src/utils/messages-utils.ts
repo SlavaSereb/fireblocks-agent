@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { CertificatesMap, FBMessage, FBMessageEnvlope, JWT, Message, MessageEnvelop } from '../types';
+import { CertificatesMap, FBMessage, FBMessageEnvlope, JWT, Message, MessageEnvelop, TxMetadataSignature } from '../types';
 
 let certMap;
 export const decodeAndVerifyMessage = (
@@ -66,12 +66,15 @@ function verifyRSASignatureFromCertificate(
   return verifier.verify(certificatePEM, signature, signatureFormat);
 }
 
+const getPolicySignature = (txMetaDataSignatures: Array<TxMetadataSignature>): TxMetadataSignature => {
+  return txMetaDataSignatures.find((_) => _.id === 'policy_service');
+}
+
 const getDataToVerify = (fbMessage: FBMessage): VerifyDetails[] => {
   const res: VerifyDetails[] = [];
 
   switch (fbMessage.type) {
-    case 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST':
-    case 'EXTERNAL_KEY_TX_SIGN_REQUEST':
+    case 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST': {
       const fbMsgPayload = fbMessage.payload;
       const messageVerifier = KEY_TO_VERIFIER_MAP[fbMsgPayload.signatureData.service.toLowerCase()];
       const certificate = certMap[messageVerifier];
@@ -84,7 +87,41 @@ const getDataToVerify = (fbMessage: FBMessage): VerifyDetails[] => {
         },
       });
       break;
+    }
+    case 'EXTERNAL_KEY_TX_SIGN_REQUEST': {
+      // Verify signature of the payload
+      const fbMsgPayload = fbMessage.payload;
+      const messageVerifier = KEY_TO_VERIFIER_MAP[fbMsgPayload.signatureData.service.toLowerCase()];
+      const certificate = certMap[messageVerifier];
+
+      res.push({
+        payload: fbMsgPayload.payload,
+        certificate,
+        signatureInfo: {
+          signature: fbMsgPayload.signatureData.signature,
+          format: 'hex',
+        },
+      });
+
+      // Verify signature of the transaction metadata
+      const parsedPayload = JSON.parse(fbMsgPayload.payload) as Message;
+      const txMetadata = parsedPayload.metadata;
+      const policySignature = getPolicySignature(txMetadata.txMetaDataSignatures);
+      const txMetadataVerifier = KEY_TO_VERIFIER_MAP[policySignature.id.toLowerCase()];
+      const txMetadataCertificate = certMap[txMetadataVerifier];
+
+      res.push({
+        payload: txMetadata.txMetadata,
+        certificate: txMetadataCertificate,
+        signatureInfo: {
+          signature: policySignature.signature,
+          format: 'hex',
+        },
+      });
+      break;
+    }
   }
+
   return res;
 };
 
