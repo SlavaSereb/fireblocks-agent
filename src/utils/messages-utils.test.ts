@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { messageBuilder } from '../services/fb-server.api.test';
-import { FBMessage, FBMessageEnvlope, FBMessagePayload, Message, MessageEnvelop } from '../types';
+import { FBMessage, FBMessageEnvelope, FBMessagePayload, Message, MessageEnvelop } from '../types';
 import * as utils from './messages-utils';
 
 describe('Messages utils', () => {
@@ -18,7 +18,7 @@ describe('Messages utils', () => {
 
     const expectedMessage: MessageEnvelop = {
       msgId: fbMessageEnvelope.msgId,
-      type: 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST',
+      type: 'KEY_LINK_PROOF_OF_OWNERSHIP_REQUEST',
       message: internalMessage,
       payload: fbMessage.payload.payload,
     };
@@ -72,7 +72,7 @@ function aKeyPair(): KeyPair {
 function aFbProofOfOwnershipMessage(privateKey: string): FBMessage {
   const fbMsgPayload = aFbMessagePayload(privateKey);
   return {
-    type: 'EXTERNAL_KEY_PROOF_OF_OWNERSHIP_REQUEST',
+    type: 'KEY_LINK_PROOF_OF_OWNERSHIP_REQUEST',
     payload: fbMsgPayload,
   };
 }
@@ -95,7 +95,7 @@ function aFbMessagePayload(privateKey: string): FBMessagePayload {
   return innerMessage;
 }
 
-function buildASignedMessage(innerMessage: FBMessage, zsCertificate): FBMessageEnvlope {
+function buildASignedMessage(innerMessage: FBMessage, zsCertificate): FBMessageEnvelope {
   const jwtMessage = jwt.sign(JSON.stringify(innerMessage), zsCertificate);
   return {
     deviceId: 'some-device-id',
